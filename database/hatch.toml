@@ -1,0 +1,8 @@
+[envs.default.scripts]
+hello = "echo Hatch is setup correctly!"
+alembic-revision = "alembic revision -m {args}"
+alembic-upgrade = "alembic upgrade head"
+alembic-downgrade = "alembic downgrade -1"
+cov = "pytest --cov-report=term-missing --cov-config=pyproject.toml --cov=autorizzami_demo_data --cov=tests {args}"
+no-cov = "cov --no-cov {args}"
+test = "pytest -p no:randomly --no-cov {args:tests}"
