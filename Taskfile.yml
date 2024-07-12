@@ -1,24 +1,25 @@
 version: '3'
 
 tasks:
+  # Check setup
+  hello:
+    cmds:
+      - hatch run hello
   # Environemnt tasks
   up:
     cmds:
       - docker-compose -f ./docker-compose/docker-compose-postgres.yml -p notes-postgres up -d
   down:
     cmds:
-      -  docker-compose -p notes-postgres down
+      - docker-compose -p notes-postgres down
       - rm -rf ./docker-compose/.tmp
   # Database tasks
   db-up:
-    dir: database
     cmds:
-      - teller run -- hatch  run alembic-upgrade
+      - hatch run alembic-upgrade
   db-down:
-    dir: database
     cmds:
-      - teller run -- hatch  run alembic-downgrade
+      - hatch run alembic-downgrade
   db-revision:
-    dir: database
     cmds:
-      - teller run -- hatch  run alembic-revision {{.CLI_ARGS}}
+      - hatch run alembic-revision {{.CLI_ARGS}}

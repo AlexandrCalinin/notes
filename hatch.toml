@@ -1,0 +1,5 @@
+[envs.default.scripts]
+hello = "echo Hatch is setup correctly!"
+alembic-revision = "alembic revision -m {args}"
+alembic-upgrade = "alembic upgrade head"
+alembic-downgrade = "alembic downgrade -1"

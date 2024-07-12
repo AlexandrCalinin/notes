@@ -1,5 +1,6 @@
-from logging.config import fileConfig
 import os
+from logging.config import fileConfig
+import sys
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
@@ -9,6 +10,23 @@ from alembic import context
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+db_user = os.getenv("DB_PG_USER")
+db_password = os.getenv("DB_PG_PASSWORD")
+db_host = os.getenv("DB_PG_HOST")
+db_port = os.getenv("DB_PG_PORT")
+db_name = os.getenv("DB_PG_DB_NAME")
+
+# Check if any environment variable is missing
+missing_vars = [var for var in ["DB_PG_USER", "DB_PG_PASSWORD", "DB_PG_HOST", "DB_PG_PORT", "DB_PG_DB_NAME"] if os.getenv(var) is None]
+if missing_vars:
+    sys.exit(f"Error: Missing environment variables: {', '.join(missing_vars)}")
+
+# Set the SQLAlchemy URL
+config.set_main_option(
+    'sqlalchemy.url',
+    f'postgresql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}',
+)
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
@@ -72,10 +90,6 @@ def run_migrations_online() -> None:
         with context.begin_transaction():
             context.run_migrations()
 
-config.set_main_option(
-    'sqlalchemy.url',
-    os.getenv('DB_PG_CONNECTION')
-)
 
 if context.is_offline_mode():
     run_migrations_offline()
